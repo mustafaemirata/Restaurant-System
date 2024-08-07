@@ -1,13 +1,16 @@
 package restaurant;
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -28,6 +31,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
+import javax.swing.JComboBox;
 
 public class Islemler extends JFrame {
 
@@ -41,11 +45,26 @@ public class Islemler extends JFrame {
     private JPanel ciroPanel;
     static String isim;
     private static JTable table;
-
+    int tavukkucuk = 0;
+	int tavukorta = 0;
+	int tavukbuyuk = 0;
+	int pilavkucuk = 0;
+	int pilavorta = 0;
+	int pilavbuyuk = 0;
+    
+	double fiyatTavukKucuk = 0;
+	double fiyatTavukOrta = 0;
+	double fiyatTavukBuyuk = 0;
+	double fiyatPilavKucuk = 0;
+	double fiyatPilavOrta = 0;
+	double fiyatPilavBuyuk = 0;
+   
     /**
      * Launch the application.
      */
     public static void main(String[] args) {
+    	
+    	
         EventQueue.invokeLater(() -> {
             try {
                 Islemler frame = new Islemler("admin"); // Kullanıcı adı örnek olarak "admin"
@@ -63,7 +82,7 @@ public class Islemler extends JFrame {
    
     public Islemler(String kullaniciadi) {
     	isim=kullaniciadi;
-    	
+   
 
         setTitle("Restoranım");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -272,6 +291,18 @@ public class Islemler extends JFrame {
         panel.add(lblPilav);
         
         JButton tavuk1_ekle = new JButton("Ekle");
+        tavuk1_ekle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	
+            	
+            	tavukkucuk++;
+            	System.out.println(tavukkucuk);
+                JOptionPane.showMessageDialog(siparisPanel, "Sepete eklendi", "Message", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    
+      
+
         tavuk1_ekle.setForeground(Color.WHITE);
         tavuk1_ekle.setFont(new Font("Times New Roman", Font.BOLD, 15));
         tavuk1_ekle.setBackground(new Color(0, 128, 192));
@@ -279,6 +310,13 @@ public class Islemler extends JFrame {
         panel.add(tavuk1_ekle);
         
         JButton tavuk2_ekle = new JButton("Ekle");
+        tavuk2_ekle.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		tavukorta++;
+            	
+                JOptionPane.showMessageDialog(siparisPanel, "Sepete eklendi", "Message", JOptionPane.INFORMATION_MESSAGE);
+        	}
+        });
         tavuk2_ekle.setForeground(Color.WHITE);
         tavuk2_ekle.setFont(new Font("Times New Roman", Font.BOLD, 15));
         tavuk2_ekle.setBackground(new Color(0, 128, 192));
@@ -286,6 +324,13 @@ public class Islemler extends JFrame {
         panel.add(tavuk2_ekle);
         
         JButton tavuk3_ekle = new JButton("Ekle");
+        tavuk3_ekle.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		tavukbuyuk++;
+            	
+                JOptionPane.showMessageDialog(siparisPanel, "Sepete eklendi", "Message", JOptionPane.INFORMATION_MESSAGE);
+        	}
+        });
         tavuk3_ekle.setForeground(Color.WHITE);
         tavuk3_ekle.setFont(new Font("Times New Roman", Font.BOLD, 15));
         tavuk3_ekle.setBackground(new Color(0, 128, 192));
@@ -293,6 +338,13 @@ public class Islemler extends JFrame {
         panel.add(tavuk3_ekle);
         
         JButton pilav1_ekle = new JButton("Ekle");
+        pilav1_ekle.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		pilavkucuk++;
+            	
+                JOptionPane.showMessageDialog(siparisPanel, "Sepete eklendi", "Message", JOptionPane.INFORMATION_MESSAGE);
+        	}
+        });
         pilav1_ekle.setForeground(Color.WHITE);
         pilav1_ekle.setFont(new Font("Times New Roman", Font.BOLD, 15));
         pilav1_ekle.setBackground(new Color(0, 128, 192));
@@ -300,6 +352,13 @@ public class Islemler extends JFrame {
         panel.add(pilav1_ekle);
         
         JButton pilav2_ekle = new JButton("Ekle");
+        pilav2_ekle.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		pilavorta++;
+            	
+                JOptionPane.showMessageDialog(siparisPanel, "Sepete eklendi", "Message", JOptionPane.INFORMATION_MESSAGE);
+        	}
+        });
         pilav2_ekle.setForeground(Color.WHITE);
         pilav2_ekle.setFont(new Font("Times New Roman", Font.BOLD, 15));
         pilav2_ekle.setBackground(new Color(0, 128, 192));
@@ -307,6 +366,13 @@ public class Islemler extends JFrame {
         panel.add(pilav2_ekle);
         
         JButton pilav3_ekle = new JButton("Ekle");
+        pilav3_ekle.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		pilavbuyuk++;
+            	
+                JOptionPane.showMessageDialog(siparisPanel, "Sepete eklendi", "Message", JOptionPane.INFORMATION_MESSAGE);
+        	}
+        });
         pilav3_ekle.setForeground(Color.WHITE);
         pilav3_ekle.setFont(new Font("Times New Roman", Font.BOLD, 15));
         pilav3_ekle.setBackground(new Color(0, 128, 192));
@@ -537,13 +603,145 @@ public class Islemler extends JFrame {
         salgam_ekle_1.setBounds(241, 305, 106, 27);
         panel_3_1.add(salgam_ekle_1);
 
+        try (Connection conn = createConnection(isim)) {
+            if (conn != null) {
+                // SQL sorguları
+                String query = "SELECT UrunFiyati FROM urunler WHERE UrunAdi=?";
+                
+                try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                    // Tavuk 50gr fiyatı
+                    pstmt.setString(1, "Ttavuk1");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            fiyatTavukKucuk = rs.getDouble("UrunFiyati");
+                            
+                        }
+                    }
+                    
+                    // Tavuk 80gr fiyatı
+                    pstmt.setString(1, "Tavuk2");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            fiyatTavukOrta = rs.getDouble("UrunFiyati");
+                        }
+                    }
+                    
+                    // Tavuk 120gr fiyatı
+                    pstmt.setString(1, "Tavuk3");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            fiyatTavukBuyuk = rs.getDouble("UrunFiyati");
+                        }
+                    }
+                    
+                    // Pilav Yarım fiyatı
+                    pstmt.setString(1, "Pilav1");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            fiyatPilavKucuk = rs.getDouble("UrunFiyati");
+                        }
+                    }
+                    
+                    // Pilav 1 Porsiyon fiyatı
+                    pstmt.setString(1, "Pilav2");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            fiyatPilavOrta = rs.getDouble("UrunFiyati");
+                        }
+                    }
+                    
+                    // Pilav 1.5 Porsiyon fiyatı
+                    pstmt.setString(1, "Pilav3");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            fiyatPilavBuyuk = rs.getDouble("UrunFiyati");
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Sepet butonu
         JButton sepeti_goruntule = new JButton("Sepet");
+        sepeti_goruntule.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Sipariş Onay");
+                
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(300, 300);
+                frame.getContentPane().setLayout(new BorderLayout());
+
+                JPanel buttonPanel = new JPanel();
+                buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+                JButton onaylaButton = new JButton("Onayla");
+                JButton bosaltButton = new JButton("Boşalt");
+
+                onaylaButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(frame, "Siparişiniz onaylandı!");
+                        frame.dispose();
+                    }
+                });
+                
+                
+
+                bosaltButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tavukkucuk = 0;
+                        tavukorta = 0;
+                        tavukbuyuk = 0;
+                        pilavkucuk = 0;
+                        pilavorta = 0;
+                        pilavbuyuk = 0;
+                        JOptionPane.showMessageDialog(frame, "Sepetiniz boşaltıldı!");
+                        frame.dispose();
+                    }
+                });
+
+                buttonPanel.add(onaylaButton);
+                buttonPanel.add(bosaltButton);
+
+                JPanel contentPanel = new JPanel();
+                contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
+                if (tavukkucuk != 0) contentPanel.add(new JLabel("Tavuk 50gr.: " + tavukkucuk + " adet, Fiyat: " + (tavukkucuk * fiyatTavukKucuk) + " TL"));
+                if (tavukorta != 0) contentPanel.add(new JLabel("Tavuk 80gr.: " + tavukorta + " adet, Fiyat: " + (tavukorta * fiyatTavukOrta) + " TL"));
+                if (tavukbuyuk != 0) contentPanel.add(new JLabel("Tavuk 120gr.: " + tavukbuyuk + " adet, Fiyat: " + (tavukbuyuk * fiyatTavukBuyuk) + " TL"));
+                if (pilavkucuk != 0) contentPanel.add(new JLabel("Pilav Yarım: " + pilavkucuk + " adet, Fiyat: " + (pilavkucuk * fiyatPilavKucuk) + " TL"));
+                if (pilavorta != 0) contentPanel.add(new JLabel("Pilav 1 Porsiyon: " + pilavorta + " adet, Fiyat: " + (pilavorta * fiyatPilavOrta) + " TL"));
+                if (pilavbuyuk != 0) contentPanel.add(new JLabel("Pilav 1.5 Porsiyon: " + pilavbuyuk + " adet, Fiyat: " + (pilavbuyuk * fiyatPilavBuyuk) + " TL"));
+
+                frame.getContentPane().add(new JLabel("Lütfen bir seçenek seçin", JLabel.CENTER), BorderLayout.NORTH);
+                frame.getContentPane().add(contentPanel, BorderLayout.CENTER);
+                frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+                frame.setVisible(true);
+          
+            }
+        });
+
         sepeti_goruntule.setForeground(Color.WHITE);
         sepeti_goruntule.setFont(new Font("Times New Roman", Font.BOLD, 15));
         sepeti_goruntule.setBackground(new Color(0, 128, 192));
         sepeti_goruntule.setBounds(584, 83, 106, 27);
         siparisPanel.add(sepeti_goruntule);
+        
+        JComboBox masa_combo = new JComboBox();
+        masa_combo.setBounds(117, 55, 55, 21);
+        siparisPanel.add(masa_combo);
+        masa_combo.addItem("1");masa_combo.addItem("2");masa_combo.addItem("3");masa_combo.addItem("4");masa_combo.addItem("5");  masa_combo.addItem("6");  masa_combo.addItem("7");
+        masa_combo.addItem("8");  masa_combo.addItem("9");  masa_combo.addItem("10");  masa_combo.addItem("11");  masa_combo.addItem("12");
+       
+        
+        JLabel lblNewLabel_1 = new JLabel("Masa No: ");
+        lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        lblNewLabel_1.setBounds(10, 59, 77, 13);
+        siparisPanel.add(lblNewLabel_1);
 
         
         
