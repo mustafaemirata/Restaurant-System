@@ -29,9 +29,7 @@ public class Giris extends JFrame {
     private JTextField kullaniciadi_textbox;
     private JTextField sifre_textbox;
 
-    /**
-     * Uygulamayı başlat.
-     */
+   
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
@@ -43,9 +41,7 @@ public class Giris extends JFrame {
         });
     }
 
-    /**
-     * Çerçeveyi oluştur.
-     */
+    
     public Giris() {
         setTitle("Restaurant Otomasyon Sistemi");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,6 +90,25 @@ public class Giris extends JFrame {
         lblAdminGirisi.setFont(new Font("Times New Roman", Font.BOLD, 18));
         lblAdminGirisi.setBounds(364, 10, 253, 27);
         contentPane.add(lblAdminGirisi);
+        
+    
+        ImageIcon icon = new ImageIcon("src/restaurant/restaurant-building.png");
+
+ 
+        Image scaledImage = icon.getImage().getScaledInstance(99, 77, Image.SCALE_SMOOTH);
+
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JButton gorsel_btn = new JButton(scaledIcon);
+        gorsel_btn.setBounds(378, 58, 99, 77);
+
+        gorsel_btn.setOpaque(false);
+        gorsel_btn.setContentAreaFilled(false);
+        gorsel_btn.setBorderPainted(false);
+
+        contentPane.add(gorsel_btn);
+
+      
     }
 
     private void performLogin() {
@@ -110,8 +125,7 @@ public class Giris extends JFrame {
     }
 
     private boolean authenticateUser(String username, String password) {
-        // Burada veritabanı doğrulama mantığı yer almalı
-        return true; // örnek amaçlı doğrulama geçildi
+        return true; 
     }
 
     private void createDatabaseAndTable(String kullaniciadi) {
@@ -130,14 +144,36 @@ public class Giris extends JFrame {
 
     private void setupTables(String databaseName, String kullaniciadi) throws SQLException {
         String connectionString = "jdbc:mysql://localhost:3306/" + databaseName;
-        try (Connection newConnection = DriverManager.getConnection(connectionString, "root", "1187");
+        try (Connection newConnection = DriverManager.getConnection(connectionString, "emir", "0634");
              Statement newStatement = newConnection.createStatement()) {
 
-            // Her masa için bir tablo oluşturuluyor
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 12; i++) { 
                 String masaAdi = "masa" + i;
-                newStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + masaAdi + " (UrunAdi VARCHAR(255), Adet INT)");
+                newStatement.executeUpdate("CREATE TABLE IF NOT EXISTS " + masaAdi + " (UrunAdi VARCHAR(255), Adet INT, Toplam INT)");
                 System.out.println(masaAdi + " tablosu oluşturuldu veya zaten var.");
+            }
+            
+            // Ürünler tablosu oluştur
+            String createUrunlerTable = "CREATE TABLE IF NOT EXISTS urunler (UrunAdi VARCHAR(255), UrunFiyati DECIMAL(10, 2))";
+            newStatement.executeUpdate(createUrunlerTable);
+            System.out.println("urunler tablosu oluşturuldu veya zaten var.");
+
+            // Ürünleri ekle
+            String[] urunler = {"Tavuk Dürüm 50gr", "Tavuk Dürüm 80gr", "Tavuk Dürüm 120gr", "Pilav Yarım Porsiyon", "Pilav Tam Porsiyon", "Pilav 1.5 Porsiyon"};
+            for (String urun : urunler) {
+                newStatement.executeUpdate("INSERT INTO urunler (UrunAdi, UrunFiyati) VALUES ('" + urun + "', 40) ON DUPLICATE KEY UPDATE UrunAdi = UrunAdi");
+                System.out.println(urun + " ürünü eklendi veya zaten var.");
+            }
+            // Masalar tablosu oluştur
+            String createMasalarTable = "CREATE TABLE IF NOT EXISTS masalar (MasaNo VARCHAR(10), Doluluk VARCHAR(10))";
+            newStatement.executeUpdate(createMasalarTable);
+            System.out.println("masalar tablosu oluşturuldu veya zaten var.");
+
+            // Masalar tablosuna MASA1, MASA2, ..., MASA12 ekle
+            for (int i = 1; i <= 12; i++) {
+                String masaNo = "MASA" + i;
+                newStatement.executeUpdate("INSERT INTO masalar (MasaNo, Doluluk) VALUES ('" + masaNo + "', 'BOS') ON DUPLICATE KEY UPDATE Doluluk = Doluluk");
+                System.out.println(masaNo + " masası eklendi veya zaten var.");
             }
         }
     }

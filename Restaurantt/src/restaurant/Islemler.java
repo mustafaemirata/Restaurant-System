@@ -160,7 +160,7 @@ public class Islemler extends JFrame {
         urun_guncelleme.setBounds(10, 336, 180, 40);
         menuPanel.add(urun_guncelleme);
         
-        JButton MASALAR = new JButton("MASALAR");
+        JButton MASALAR = new JButton("Masalar");
         MASALAR.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		Masalar homePage2 = new Masalar(kullaniciadi);
@@ -603,55 +603,54 @@ public class Islemler extends JFrame {
         salgam_ekle_1.setBounds(241, 305, 106, 27);
         panel_3_1.add(salgam_ekle_1);
 
-        try (Connection conn = createConnection(isim)) {
+        try (Connection conn = createConnection(isim + "_restoran")) {
             if (conn != null) {
                 // SQL sorguları
                 String query = "SELECT UrunFiyati FROM urunler WHERE UrunAdi=?";
-                
+
                 try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                    // Tavuk 50gr fiyatı
-                    pstmt.setString(1, "Ttavuk1");
+                    // Tavuk Dürüm 50gr fiyatı
+                    pstmt.setString(1, "Tavuk Dürüm 50gr");
                     try (ResultSet rs = pstmt.executeQuery()) {
                         if (rs.next()) {
                             fiyatTavukKucuk = rs.getDouble("UrunFiyati");
-                            
                         }
                     }
-                    
-                    // Tavuk 80gr fiyatı
-                    pstmt.setString(1, "Tavuk2");
+
+                    // Tavuk Dürüm 80gr fiyatı
+                    pstmt.setString(1, "Tavuk Dürüm 80gr");
                     try (ResultSet rs = pstmt.executeQuery()) {
                         if (rs.next()) {
                             fiyatTavukOrta = rs.getDouble("UrunFiyati");
                         }
                     }
-                    
-                    // Tavuk 120gr fiyatı
-                    pstmt.setString(1, "Tavuk3");
+
+                    // Tavuk Dürüm 120gr fiyatı
+                    pstmt.setString(1, "Tavuk Dürüm 120gr");
                     try (ResultSet rs = pstmt.executeQuery()) {
                         if (rs.next()) {
                             fiyatTavukBuyuk = rs.getDouble("UrunFiyati");
                         }
                     }
-                    
-                    // Pilav Yarım fiyatı
-                    pstmt.setString(1, "Pilav1");
+
+                    // Pilav Yarım Porsiyon fiyatı
+                    pstmt.setString(1, "Pilav Yarım Porsiyon");
                     try (ResultSet rs = pstmt.executeQuery()) {
                         if (rs.next()) {
                             fiyatPilavKucuk = rs.getDouble("UrunFiyati");
                         }
                     }
-                    
-                    // Pilav 1 Porsiyon fiyatı
-                    pstmt.setString(1, "Pilav2");
+
+                    // Pilav Tam Porsiyon fiyatı
+                    pstmt.setString(1, "Pilav Tam Porsiyon");
                     try (ResultSet rs = pstmt.executeQuery()) {
                         if (rs.next()) {
                             fiyatPilavOrta = rs.getDouble("UrunFiyati");
                         }
                     }
-                    
+
                     // Pilav 1.5 Porsiyon fiyatı
-                    pstmt.setString(1, "Pilav3");
+                    pstmt.setString(1, "Pilav 1.5 Porsiyon");
                     try (ResultSet rs = pstmt.executeQuery()) {
                         if (rs.next()) {
                             fiyatPilavBuyuk = rs.getDouble("UrunFiyati");
@@ -663,12 +662,19 @@ public class Islemler extends JFrame {
             e.printStackTrace();
         }
 
+        JComboBox masa_combo = new JComboBox();
+        masa_combo.setBounds(117, 55, 55, 21);
+        siparisPanel.add(masa_combo);
+        masa_combo.addItem("1");masa_combo.addItem("2");masa_combo.addItem("3");masa_combo.addItem("4");masa_combo.addItem("5");  masa_combo.addItem("6");  masa_combo.addItem("7");
+        masa_combo.addItem("8");  masa_combo.addItem("9");  masa_combo.addItem("10");  masa_combo.addItem("11");  masa_combo.addItem("12");
+       
+
         // Sepet butonu
         JButton sepeti_goruntule = new JButton("Sepet");
         sepeti_goruntule.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = new JFrame("Sipariş Onay");
-                
+
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(300, 300);
                 frame.getContentPane().setLayout(new BorderLayout());
@@ -682,12 +688,92 @@ public class Islemler extends JFrame {
                 onaylaButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(frame, "Siparişiniz onaylandı!");
-                        frame.dispose();
+                        // Get the selected table number from the combo box
+                        String selectedTable = (String) masa_combo.getSelectedItem(); // Assuming masa_combo is your JComboBox
+                        String tableName = "masa" + selectedTable;
+
+                        try {
+                            // Establish database connection
+                            Connection connection = createDatabaseConnection(); // Assuming createDatabaseConnection() is your method to connect to the database
+                            if (connection != null) {
+                                PreparedStatement preparedStatement = connection.prepareStatement(
+                                    "INSERT INTO " + tableName + " (UrunAdi, Adet, Toplam) VALUES (?, ?,?)");
+
+                                // Add items to the table
+                                if (tavukkucuk != 0) {
+                                    preparedStatement.setString(1, "Tavuk 50gr");
+                                    preparedStatement.setInt(2, tavukkucuk);
+                                    preparedStatement.setDouble(3, tavukkucuk * fiyatTavukKucuk); 
+                                    preparedStatement.addBatch();
+                                }
+                                if (tavukorta != 0) {
+                                    preparedStatement.setString(1, "Tavuk 80gr");
+                                    preparedStatement.setInt(2, tavukorta);
+                                    preparedStatement.addBatch();
+                                }
+                                if (tavukbuyuk != 0) {
+                                    preparedStatement.setString(1, "Tavuk 120gr");
+                                    preparedStatement.setInt(2, tavukbuyuk);
+                                    preparedStatement.addBatch();
+                                }
+                                if (pilavkucuk != 0) {
+                                    preparedStatement.setString(1, "Pilav Yarım Porsiyon");
+                                    preparedStatement.setInt(2, pilavkucuk);
+                                    preparedStatement.addBatch();
+                                }
+                                if (pilavorta != 0) {
+                                    preparedStatement.setString(1, "Pilav 1 Porsiyon");
+                                    preparedStatement.setInt(2, pilavorta);
+                                    preparedStatement.addBatch();
+                                }
+                                if (pilavbuyuk != 0) {
+                                    preparedStatement.setString(1, "Pilav 1.5 Porsiyon");
+                                    preparedStatement.setInt(2, pilavbuyuk);
+                                    preparedStatement.addBatch();
+                                }
+
+                                // Execute batch insert
+                                preparedStatement.executeBatch();
+                                preparedStatement.close();
+                                connection.close();
+                            }
+                            
+                            Connection updateConnection = createDatabaseConnection();
+                            if (updateConnection != null) {
+                                PreparedStatement updateStatement = updateConnection.prepareStatement(
+                                    "UPDATE masalar SET Doluluk = 'Dolu' WHERE MasaNo = ?");
+                                updateStatement.setString(1, "MASA" + selectedTable);
+                                updateStatement.executeUpdate();
+                                updateStatement.close();
+                                updateConnection.close();
+                            }
+
+                            JOptionPane.showMessageDialog(frame, "Siparişiniz onaylandı!");
+                            frame.dispose();
+                        } catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(frame, "Sipariş eklenirken hata oluştfvgbhnu: " + ex.getMessage());
+                        }
+                    }
+
+                    private Connection createDatabaseConnection() {
+                        // Implement your database connection logic here
+                        Connection connection = null;
+                        try {
+                            // Load the database driver
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            // Establish the connection
+                            connection = DriverManager.getConnection(
+                                "jdbc:mysql://localhost:3306/"+isim+"_restoran", // Replace with your database URL
+                                "emir", // Replace with your database username
+                                "0634"  // Replace with your database password
+                            );
+                        } catch (ClassNotFoundException | SQLException e) {
+                            e.printStackTrace();
+                        }
+                        return connection;
                     }
                 });
-                
-                
+
 
                 bosaltButton.addActionListener(new ActionListener() {
                     @Override
@@ -710,13 +796,16 @@ public class Islemler extends JFrame {
                 contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
                 if (tavukkucuk != 0) contentPanel.add(new JLabel("Tavuk 50gr.: " + tavukkucuk + " adet, Fiyat: " + (tavukkucuk * fiyatTavukKucuk) + " TL"));
+
                 if (tavukorta != 0) contentPanel.add(new JLabel("Tavuk 80gr.: " + tavukorta + " adet, Fiyat: " + (tavukorta * fiyatTavukOrta) + " TL"));
                 if (tavukbuyuk != 0) contentPanel.add(new JLabel("Tavuk 120gr.: " + tavukbuyuk + " adet, Fiyat: " + (tavukbuyuk * fiyatTavukBuyuk) + " TL"));
                 if (pilavkucuk != 0) contentPanel.add(new JLabel("Pilav Yarım: " + pilavkucuk + " adet, Fiyat: " + (pilavkucuk * fiyatPilavKucuk) + " TL"));
                 if (pilavorta != 0) contentPanel.add(new JLabel("Pilav 1 Porsiyon: " + pilavorta + " adet, Fiyat: " + (pilavorta * fiyatPilavOrta) + " TL"));
                 if (pilavbuyuk != 0) contentPanel.add(new JLabel("Pilav 1.5 Porsiyon: " + pilavbuyuk + " adet, Fiyat: " + (pilavbuyuk * fiyatPilavBuyuk) + " TL"));
 
-                frame.getContentPane().add(new JLabel("Lütfen bir seçenek seçin", JLabel.CENTER), BorderLayout.NORTH);
+                
+                
+                frame.getContentPane().add(new JLabel("Fişin yazılacağı masa: "+(String) masa_combo.getSelectedItem(), JLabel.CENTER), BorderLayout.NORTH);
                 frame.getContentPane().add(contentPanel, BorderLayout.CENTER);
                 frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
@@ -731,12 +820,7 @@ public class Islemler extends JFrame {
         sepeti_goruntule.setBounds(584, 83, 106, 27);
         siparisPanel.add(sepeti_goruntule);
         
-        JComboBox masa_combo = new JComboBox();
-        masa_combo.setBounds(117, 55, 55, 21);
-        siparisPanel.add(masa_combo);
-        masa_combo.addItem("1");masa_combo.addItem("2");masa_combo.addItem("3");masa_combo.addItem("4");masa_combo.addItem("5");  masa_combo.addItem("6");  masa_combo.addItem("7");
-        masa_combo.addItem("8");  masa_combo.addItem("9");  masa_combo.addItem("10");  masa_combo.addItem("11");  masa_combo.addItem("12");
-       
+        
         
         JLabel lblNewLabel_1 = new JLabel("Masa No: ");
         lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 16));
@@ -817,8 +901,8 @@ public class Islemler extends JFrame {
                 model.addColumn("Ürün Fiyatı");
 
                 while (resultSet.next()) {
-                    String urunAdi = resultSet.getString("UrunAdi");
-                    double urunFiyati = resultSet.getDouble("UrunFiyati");
+                    String urunAdi = resultSet.getString("urunAdi");
+                    double urunFiyati = resultSet.getDouble("urunFiyati");
                     model.addRow(new Object[]{urunAdi, urunFiyati});
                 }
 
@@ -838,8 +922,8 @@ public class Islemler extends JFrame {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/"+isim+"_restoran";
-            String kullaniciAdi = "root";
-            String sifre = "1187";
+            String kullaniciAdi = "emir";
+            String sifre = "0634";
             return DriverManager.getConnection(url, kullaniciAdi, sifre);
         } catch (Exception e) {
             System.out.println("Veritabanı bağlantısı başarısADSAız: " + e.getMessage());
